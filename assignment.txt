@@ -1,0 +1,62 @@
+Take-Home Assignment: Employee
+Directory API
+Overview
+Build a small but production-minded REST API for managing an employee directory.
+Use any language, framework, and AI tools you choose — we expect you to use AI.
+Bring your AI conversation log to the interview.
+We are not looking for a complete product. We are looking for how you think, how you
+work with AI, and how well you understand what you built.
+Requirements
+Core Data Model
+An employee record should include at minimum:
+ID, first name, last name, email
+Department, job title
+Employment status (active, inactive, on leave)
+Hire date
+Date of birth (DOB)
+Social Security Number (SSN)
+Compensation (salary or hourly rate)
+1. Single Record Operations
+GET /employees/:id — fetch one employee
+POST /employees — create an employee
+PUT /employees/:id — update an employee
+DELETE /employees/:id — deactivate an employee (soft delete preferred)
+2. Bulk Operations
+POST /employees/import — accept a JSON or CSV payload to create or update
+multiple employees in one request
+Return a summary response: how many succeeded, how many failed, and why each
+failure occurred
+3. Filtering & Reporting
+GET /employees — list employees with support for at least two filters (e.g.,
+department, status)
+GET /reports/headcount — return employee count grouped by department
+Bonus: support a date range filter to show employees hired within a period
+4. People Finder
+Build a search endpoint that allows users to locate employees across multiple fields:
+GET /employees/search?q= — search by name, email, department, or job title
+Results should be ranked by relevance (exact matches first)
+Sensitive fields (SSN, DOB, compensation) must never appear in search results
+regardless of query
+Bonus: support fuzzy matching for name misspellings (e.g., “Jon” returns “John”)
+Bonus: support GET /employees/search?manager=:id to find all direct reports of
+a given manager
+This feature is intentionally open-ended. Think about what an HR admin needs
+vs. what a regular employee should be allowed to search.
+5. Public API Considerations
+Design your API as if it will be consumed by external systems (payroll, ATS, benefits
+platforms). This means:
+Consistent, predictable error responses with meaningful messages
+Input validation with clear feedback
+At least one example of how you would handle versioning (even if just a /v1/ prefix)
+5. MCP (Model Context Protocol) Endpoint — Bonus
+Expose one tool-compatible endpoint that an AI agent could call to look up or summarize
+employee data. For example:
+A GET /mcp/tools/employee-lookup that accepts a natural language query param
+and returns structured employee data
+This does not need to be fully functional — a stub with a clear schema and documented
+intent is sufficient.
+What to Bring to the Interview
+1. Your code — runnable or reviewable
+2. Your AI conversation log — the actual transcript, not a summary
+3. A 2-minute mental walkthrough — be ready to explain one decision you made and
+one thing you would improve
