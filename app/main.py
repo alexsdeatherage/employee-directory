@@ -3,6 +3,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.database import init_db, get_db
+from app.routes import employees
 
 app = FastAPI(title="Employee Directory API")
 
@@ -10,6 +11,10 @@ app = FastAPI(title="Employee Directory API")
 @app.on_event("startup")
 def on_startup():
 	init_db()
+
+
+# Register routers
+app.include_router(employees.router, prefix="/employees", tags=["employees"])
 
 
 @app.get("/health/db")
