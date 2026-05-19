@@ -40,6 +40,11 @@ class EmployeeImportSummary(BaseModel):
     failed: int
     errors: List[EmployeeImportError]
 
+
+class HeadcountRead(BaseModel):
+    department: Optional[str] = None
+    count: int
+
 class EmployeeRead(BaseModel):
     id: int
     first_name: str

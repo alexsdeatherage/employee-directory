@@ -1,15 +1,35 @@
 import csv
 import io
 import json
+from datetime import date
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app import models, schemas
 from app.database import get_db
+from app.routes.employee_filters import apply_employee_filters, validate_hire_date_range
 
 router = APIRouter()
+
+
+@router.get("", response_model=list[schemas.EmployeeRead])
+def list_employees(
+    department: str | None = None,
+    employee_status: str | None = Query(None, alias="status"),
+    hired_after: date | None = None,
+    hired_before: date | None = None,
+    db: Session = Depends(get_db),
+):
+    try:
+        validate_hire_date_range(hired_after, hired_before)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
+
+    query = db.query(models.Employee)
+    query = apply_employee_filters(query, models, department, employee_status, hired_after, hired_before)
+    return query.order_by(models.Employee.id).all()
 
 
 @router.post("/import", response_model=schemas.EmployeeImportSummary)
