@@ -58,3 +58,47 @@ class EmployeeRead(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class SearchResponse(BaseModel):
+    total: int
+    results: List[EmployeeRead]
+
+
+class ErrorDetail(BaseModel):
+    loc: List[str]
+    msg: str
+    type: str | None = None
+
+
+class ErrorResponse(BaseModel):
+    error: dict
+
+
+class MCPToolInfo(BaseModel):
+    name: str
+    version: str
+    description: str
+
+
+class MCPEmployee(BaseModel):
+    id: int
+    first_name: str
+    last_name: str
+    email: EmailStr
+    department: Optional[str]
+    job_title: Optional[str]
+    status: Optional[str]
+    hire_date: Optional[date]
+    match_score: float
+
+
+class MCPToolResponse(BaseModel):
+    tool: MCPToolInfo
+    request_id: Optional[str]
+    query: str
+    total: int
+    results: List[MCPEmployee]
+    summary: Optional[str] = None
+    confidence: Optional[float] = None
+    notes: Optional[List[str]] = None

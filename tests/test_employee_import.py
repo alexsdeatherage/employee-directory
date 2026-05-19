@@ -3,7 +3,7 @@ from app import models
 
 def test_import_employees_json_upserts_and_succeeds(client, db_session):
 	response = client.post(
-		"/employees/import",
+		"/v1/employees/import",
 		json=[
 			{
 				"first_name": "Alice",
@@ -35,7 +35,7 @@ def test_import_employees_json_upserts_and_succeeds(client, db_session):
 
 def test_import_employees_csv_reports_row_errors_and_updates_existing(client, db_session):
 	create_existing = client.post(
-		"/employees",
+		"/v1/employees",
 		json={
 			"first_name": "Alice",
 			"last_name": "Smith",
@@ -54,7 +54,7 @@ def test_import_employees_csv_reports_row_errors_and_updates_existing(client, db
 	)
 
 	response = client.post(
-		"/employees/import",
+		"/v1/employees/import",
 		data=csv_payload,
 		headers={"Content-Type": "text/csv"},
 	)
@@ -67,7 +67,7 @@ def test_import_employees_csv_reports_row_errors_and_updates_existing(client, db
 	assert len(summary["errors"]) == 1
 	assert summary["errors"][0]["row"] == 2
 
-	updated = client.get(f"/employees/{existing_id}")
+	updated = client.get(f"/v1/employees/{existing_id}")
 	assert updated.status_code == 200
 	assert updated.json()["job_title"] == "Staff Engineer"
 

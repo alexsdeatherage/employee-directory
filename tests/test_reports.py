@@ -1,6 +1,6 @@
 def test_headcount_report_groups_by_department(client):
 	client.post(
-		"/employees",
+		"/v1/employees",
 		json={
 			"first_name": "Alice",
 			"last_name": "Smith",
@@ -12,7 +12,7 @@ def test_headcount_report_groups_by_department(client):
 		},
 	)
 	client.post(
-		"/employees",
+		"/v1/employees",
 		json={
 			"first_name": "Bob",
 			"last_name": "Johnson",
@@ -24,7 +24,7 @@ def test_headcount_report_groups_by_department(client):
 		},
 	)
 	client.post(
-		"/employees",
+		"/v1/employees",
 		json={
 			"first_name": "Carol",
 			"last_name": "Taylor",
@@ -36,7 +36,7 @@ def test_headcount_report_groups_by_department(client):
 		},
 	)
 
-	response = client.get("/reports/headcount")
+	response = client.get("/v1/reports/headcount")
 	assert response.status_code == 200
 	rows = {row["department"]: row["count"] for row in response.json()}
 	assert rows["Engineering"] == 2
@@ -45,7 +45,7 @@ def test_headcount_report_groups_by_department(client):
 
 def test_headcount_report_applies_filters(client):
 	client.post(
-		"/employees",
+		"/v1/employees",
 		json={
 			"first_name": "Alice",
 			"last_name": "Smith",
@@ -57,7 +57,7 @@ def test_headcount_report_applies_filters(client):
 		},
 	)
 	client.post(
-		"/employees",
+		"/v1/employees",
 		json={
 			"first_name": "Bob",
 			"last_name": "Johnson",
@@ -69,7 +69,7 @@ def test_headcount_report_applies_filters(client):
 		},
 	)
 	client.post(
-		"/employees",
+		"/v1/employees",
 		json={
 			"first_name": "Carol",
 			"last_name": "Taylor",
@@ -82,7 +82,7 @@ def test_headcount_report_applies_filters(client):
 	)
 
 	response = client.get(
-		"/reports/headcount",
+		"/v1/reports/headcount",
 		params={"status": "active", "hired_after": "2024-01-01", "hired_before": "2024-12-31"},
 	)
 	assert response.status_code == 200
